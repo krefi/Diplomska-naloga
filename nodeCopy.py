@@ -15,7 +15,7 @@ class Pointer:
 
 class PersistentTree:
     def __init__(self):
-        self.E = 2
+        self.E = 1
         self.accessArray = []
 
     #rekurzivna metoda za vnos nove vrednosti
@@ -135,12 +135,12 @@ class PersistentTree:
             if len(inorderSuccessor.extraPointers) < self.E - 1:
                 inorderSuccessor.extraPointers.append(Pointer(latestLeftPointer, version, 0))
                 inorderSuccessor.extraPointers.append(Pointer(rightTarget, version, 1))
-                return (inorderSuccessor, False)
+                return (inorderSuccessor, True)
             else: 
                 copyNode = Node(inorderSuccessor.key, version)
-                copyNode.right.target = latestRightPointer
-                copyNode.left.target = rightTarget
-                return (inorderSuccessor, True)
+                copyNode.right.target = rightTarget
+                copyNode.left.target = latestLeftPointer
+                return (copyNode, True)
 
     #metoda najde najnižjo vrednost poddrevesa z podanim začetkom, za določeno verzijo
     def minNode(self, node, version):
@@ -166,3 +166,21 @@ class PersistentTree:
         rightPointers.extend(rightExtraPointers)
         return max(rightPointers, key=lambda pointer: pointer.version).target
 
+
+
+    def countNodes(self, low, high, version):
+        return self.countNodesRec(self.accessArray[version], low, high, version)
+        
+    #metoda prešteje število vozlišč v intervalu
+    def countNodesRec(self, root, low, high, version):
+        if root is None:
+            return 0
+
+        if low <= root.key <= high:
+            return 1 + self.countNodesRec(self.findLatestValidLeftPointer(root, version), low, high, version) + self.countNodesRec(self.findLatestValidRightPointer(root, version), low, high, version)
+
+        if root.key > high:
+            return self.countNodesRec(self.findLatestValidLeftPointer(root, version), low, high, version)
+
+        if root.key < low:
+            return self.countNodesRec(self.findLatestValidRightPointer(root, version), low, high, version)

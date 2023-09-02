@@ -1,9 +1,12 @@
 import nodeCopy
 import bisect
+from random import randrange
+from sys import setrecursionlimit
 
-versionsXcoordinate = []
+setrecursionlimit(10**9)
 
-
+n = 10000
+a = 1000000
 class Line:
     def __init__(self, startX, startY, length):
         self.startX = startX
@@ -28,7 +31,8 @@ def getArrayOfPoints(arrayOfLines):
 #metoda ustvari obstojno drevo iz točk
 def createPersistentTree(arrayOfPoints):
     pbst = nodeCopy.PersistentTree()
-    for point in arrayOfPoints:
+    for index, point in enumerate(arrayOfPoints):
+        # print(index)
         if point.start:
             pbst.insert(point.y)
         else:
@@ -37,29 +41,53 @@ def createPersistentTree(arrayOfPoints):
 
 #metoda pridobi število presečišč za podano vertikalno daljico
 def getIntersections(line):
-    lineVersion = -1
-    for i, point in enumerate(arrayOfPoints):
-        if point.x < line.startX:
-            lineVersion = i - 1
-        elif point.x == line.startX and not point.start:
-            lineVersion = i - 1
-        else: 
-            break
-
+    lineVersion = find_last_index(arrayOfPoints, line.startX) - 1
+    
     if lineVersion < 0:
         return 0
-    yValues = persistentTree.inorder(lineVersion)
-    interesctions = bisect.bisect_left(yValues, line.startY + line.length) - bisect.bisect_right(yValues, line.startY)
-    return interesctions
+
+    return persistentTree.countNodes(line.startY, line.startY + line.length, lineVersion)
+
+#metoda poišče zadno verzijo ki ustreza vertikalni daljici
+def find_last_index(arr, target_x):
+    left, right = 0, len(arr) - 1
+    last_index = -1
+
+    while left <= right:
+        mid = left + (right - left) // 2
+        obj = arr[mid]
+
+        if obj.x <= target_x:
+            if obj.x == target_x and obj.start:
+                right = mid - 1
+            else:
+                last_index = mid
+                left = mid + 1
+        else:
+            right = mid - 1
+
+    return last_index
 
 
-horizontalLines = [Line(5, 9, 4), Line(1, 9, 1), Line(1, 3, 4), Line(3, 5, 6), Line(0, 4, 4), Line(4, 1, 7), Line(6, 3, 2),
-                   Line(1, 2, 5), Line(5, 8, 3), Line(4, 6, 6), Line(1, 7, 10)]
+horizontalLines = []
+for it in range(n):
+    l = Line(randrange(a),randrange(a),randrange(a//100))
+    horizontalLines.append(l)
+
 arrayOfPoints = getArrayOfPoints(horizontalLines)
 persistentTree = createPersistentTree(arrayOfPoints)
 
-print("Vnesite vertikalne daljice v obliki: x_koordinata_začetka, y_koordinata_konca, dolžina")
-while True:
-    inputLine = input().split(', ')
-    line = Line(int(inputLine[0]), int(inputLine[1]), int(inputLine[2]))
-    print(getIntersections(line))
+results = []
+for it in range(n):
+    l = Line(randrange(a),randrange(a),randrange(a//10))
+    r = getIntersections(l)
+    results.append(r)
+print(results)
+
+
+
+# print("Vnesite vertikalne daljice v obliki: x_koordinata_začetka, y_koordinata_konca, dolžina")
+# while True:
+#     inputLine = input().split(', ')
+#     line = Line(int(inputLine[0]), int(inputLine[1]), int(inputLine[2]))
+#     print(getIntersections(line))
