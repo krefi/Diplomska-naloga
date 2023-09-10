@@ -1,7 +1,8 @@
-import nodeCopy
+import nodeCopyCount
 import bisect
 from random import randrange
 from sys import setrecursionlimit
+import time
 
 setrecursionlimit(10**9)
 
@@ -30,7 +31,7 @@ def getArrayOfPoints(arrayOfLines):
 
 #metoda ustvari obstojno drevo iz točk
 def createPersistentTree(arrayOfPoints):
-    pbst = nodeCopy.PersistentTree()
+    pbst = nodeCopyCount.PersistentTree()
     for index, point in enumerate(arrayOfPoints):
         # print(index)
         if point.start:
@@ -43,10 +44,10 @@ def createPersistentTree(arrayOfPoints):
 def getIntersections(line):
     lineVersion = find_last_index(arrayOfPoints, line.startX) - 1
     
-    if lineVersion < 0:
+    if lineVersion < 0 or line.length == 0:
         return 0
+    return persistentTree.countIntervalNodes(line.startY, line.startY + line.length, lineVersion)
 
-    return persistentTree.countNodes(line.startY, line.startY + line.length, lineVersion)
 
 #metoda poišče zadno verzijo ki ustreza vertikalni daljici
 def find_last_index(arr, target_x):
@@ -68,21 +69,25 @@ def find_last_index(arr, target_x):
 
     return last_index
 
-
+	
+ms = time.time_ns() // 1_000_000
 horizontalLines = []
 for it in range(n):
-    l = Line(randrange(a),randrange(a),randrange(a//100))
+    l = Line(randrange(a),randrange(a),randrange(a))
     horizontalLines.append(l)
 
 arrayOfPoints = getArrayOfPoints(horizontalLines)
 persistentTree = createPersistentTree(arrayOfPoints)
-
+	
+ms2 = time.time_ns() // 1_000_000
+print(ms2- ms)
 results = []
 for it in range(n):
-    l = Line(randrange(a),randrange(a),randrange(a//10))
+    l = Line(randrange(a),randrange(a),randrange(a))
     r = getIntersections(l)
     results.append(r)
-print(results)
+print(time.time_ns() // 1_000_000 - ms2)
+# print(results)
 
 
 
