@@ -2,7 +2,6 @@ import nodeCopyCount
 import bisect
 from random import randrange
 from sys import setrecursionlimit
-import time
 
 setrecursionlimit(10**9)
 
@@ -70,7 +69,6 @@ def find_last_index(arr, target_x):
     return last_index
 
 	
-ms = time.time_ns() // 1_000_000
 horizontalLines = []
 for it in range(n):
     l = Line(randrange(a),randrange(a),randrange(a))
@@ -78,16 +76,13 @@ for it in range(n):
 
 arrayOfPoints = getArrayOfPoints(horizontalLines)
 persistentTree = createPersistentTree(arrayOfPoints)
-	
-ms2 = time.time_ns() // 1_000_000
-print(ms2- ms)
+
 results = []
 for it in range(n):
     l = Line(randrange(a),randrange(a),randrange(a))
     r = getIntersections(l)
     results.append(r)
-print(time.time_ns() // 1_000_000 - ms2)
-# print(results)
+print(results)
 
 
 
