@@ -41,7 +41,7 @@ def createPersistentTree(arrayOfPoints):
 
 #metoda pridobi število presečišč za podano vertikalno daljico
 def getIntersections(line):
-    lineVersion = find_last_index(arrayOfPoints, line.startX) - 1
+    lineVersion = find_last_index(arrayOfPoints, line.startX)
     
     if lineVersion < 0 or line.length == 0:
         return 0
