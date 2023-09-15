@@ -5,8 +5,8 @@ from sys import setrecursionlimit
 
 setrecursionlimit(10**9)
 
-n = 10000
-a = 1000000
+n = 1000
+a = 100000
 class Line:
     def __init__(self, startX, startY, length):
         self.startX = startX
@@ -71,23 +71,36 @@ def find_last_index(arr, target_x):
 	
 horizontalLines = []
 for it in range(n):
-    l = Line(randrange(a),randrange(a),randrange(a))
+    l = Line(randrange(a),randrange(a),randrange(a) + 1)
     horizontalLines.append(l)
 
 arrayOfPoints = getArrayOfPoints(horizontalLines)
 persistentTree = createPersistentTree(arrayOfPoints)
 
-results = []
-for it in range(n):
-    l = Line(randrange(a),randrange(a),randrange(a))
-    r = getIntersections(l)
-    results.append(r)
-print(results)
+
+# Koda za testiranje pravilnosti algoritma v primerjavi z naivno metodo
+# results = []
+# bruteforce = []
+# for it in range(n):
+#     l = Line(randrange(a),randrange(a),randrange(a) + 1)
+#     r = getIntersections(l)
+#     results.append(r)
+
+#     vx,vy,vd = l.startX, l.startY, l.length
+#     cnt = 0
+#     for hor in horizontalLines:
+#         hx, hy, hd = hor.startX, hor.startY, hor.length
+#         if hx<vx<hx+hd and vy<hy<vy+vd:
+#             cnt += 1
+#     bruteforce.append(cnt)
+
+# assert bruteforce == results
 
 
 
-# print("Vnesite vertikalne daljice v obliki: x_koordinata_začetka, y_koordinata_konca, dolžina")
-# while True:
-#     inputLine = input().split(', ')
-#     line = Line(int(inputLine[0]), int(inputLine[1]), int(inputLine[2]))
-#     print(getIntersections(line))
+
+print("Vnesite vertikalne daljice v obliki: x_koordinata_začetka, y_koordinata_konca, dolžina")
+while True:
+    inputLine = input().split(', ')
+    line = Line(int(inputLine[0]), int(inputLine[1]), int(inputLine[2]))
+    print(getIntersections(line))

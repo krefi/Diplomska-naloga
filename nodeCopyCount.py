@@ -35,7 +35,7 @@ class PersistentTree:
         latestLeftPointer = self.findLatestValidLeftPointer(node, version)
         latestRightPointer = self.findLatestValidRightPointer(node, version)
 
-        if key < node.key:
+        if key <= node.key:
             #poiščemo kazalec levo z najvišjo verzijo
             newNode = self.recInsert(key, version, latestLeftPointer)
             if len(newNode) == 3:
